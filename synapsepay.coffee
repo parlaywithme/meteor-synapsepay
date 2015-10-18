@@ -1,0 +1,2 @@
+@SynapsePay =
+  hi: 1
