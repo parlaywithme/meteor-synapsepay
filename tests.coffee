@@ -1,16 +1,15 @@
 l = (x...) ->
   console.log y for y in x
 
-userId = '5623ec5786c27348d5b9c799'
+userId = '5625c0d186c27345244db50b'
 
 # sandbox creds
-s = new SynapsePay
+synapse = new SynapsePay
   client_id: 'id-ce2646b8-23eb-4219-8775-c459b29977bb'
   client_secret: 'secret-04936235-c82a-47c8-8fe5-daff8e5d03bc'
   development_mode: yes
   fingerprint: 'a'
   ip_address: '1.1.1.1'
-, userId
 
 bobData = {
     "logins" :  [
@@ -257,7 +256,7 @@ synNode = null
 #        type: 'SYNAPSE-US' } ],
 #   success: true }
 
-achNodeNumberData =
+accountNumbers =
   "type" : "ACH-US",
   "info" : {
       "nickname" : "Ruby Library Savings Account",
@@ -274,7 +273,7 @@ achNodeNumberData =
 achNumberNode = null
 # similar to synNode, but allowed: 'CREDIT'
 
-achNodeLoginData =
+usernamePassword =
   "type" : "ACH-US",
   "info" : {
     "bank_id" : "synapse_good",
@@ -301,19 +300,20 @@ describe 'sanity', ->
 describe 'users', ->
 
   before ->
-    bob = s.users.create bobData
+    bob = synapse.users.create bobData
+    l 'bob', bob
 
   it 'gets single', ->
-    user = s.users.get {userId}
+    user = synapse.users.get {userId}
     chai.assert.equal user._id, userId
 
   it 'gets all', ->
-    all = s.users.get {}
+    all = synapse.users.get {}
     chai.assert.isArray all.users
     chai.assert.equal all.error_code, '0'
 
   it 'gets none', ->
-    none = s.users.get userId: 'a'
+    none = synapse.users.get userId: 'a'
     chai.assert.equal none.error.en, 'The url is not found.'
 
   it 'creates', ->
@@ -323,7 +323,8 @@ describe 'users', ->
   describe 'with key', ->
 
     before ->
-      oauth = s.users.refresh refresh_token: bob.refresh_token
+      oauth = synapse.users.refresh refresh_token: bob.refresh_token
+      l 'client', synapse.client
 
     it 'can get key', ->
       chai.assert.isString oauth.oauth_key
@@ -331,14 +332,14 @@ describe 'users', ->
     describe 'with kba questions', ->
 
       before ->
-        questions = s.users.addDoc kyc
+        questions = synapse.users.addDoc kyc
 
       it 'gets questions', ->
         chai.assert.isString questions.question_set.questions[0].question
 
       it 'accepts kba answers', ->
         answers.doc.question_set_id = questions.question_set.id
-        user = s.users.answerKBA answers
+        user = synapse.users.answerKBA answers
         chai.assert.equal user.permission, 'RECEIVE'
 
       describe 'with full permissions', ->
@@ -346,7 +347,7 @@ describe 'users', ->
         @timeout 6 * 1000
 
         before ->
-          bob2 = s.users.attachFile 'https://s3.amazonaws.com/synapse_django/static_assets/marketing/images/synapse_dark.png'
+          bob2 = synapse.users.attachFile 'https://s3.amazonaws.com/synapse_django/static_assets/marketing/images/synapse_dark.png'
 
         it 'accepts ID', ->
           chai.assert.equal bob2.permission, 'SEND-AND-RECEIVE'
@@ -355,15 +356,15 @@ describe 'users', ->
         describe 'nodes', ->
 
           before ->
-            achNumberNode = s.nodes.add achNodeNumberData
-            mfaQuestion = s.nodes.add achNodeLoginData
+            achNumberNode = synapse.nodes.add accountNumbers
+            mfaQuestion = synapse.nodes.add usernamePassword
 
           it 'lists all', ->
-            # l s.nodes.get null
+            # l synapse.nodes.get null
             0
 
           it 'creates type synapse', ->
-            synNode = s.nodes.add synNodeData
+            synNode = synapse.nodes.add synNodeData
             chai.assert.equal synNode.nodes[0].allowed, 'CREDIT-AND-DEBIT'
 
           it 'creates ach with account number', ->
@@ -378,10 +379,10 @@ describe 'users', ->
 
             before ->
               l achNumberNode
-              achNumberNodeVerified = s.nodes.verify achNumberNode.nodes[0]._id,
+              achNumberNodeVerified = synapse.nodes.verify achNumberNode.nodes[0]._id,
                 micro: [.1, .1]
 
-              # achLoginNodeVerified = s.nodes.verify
+              # achLoginNodeVerified = synapse.nodes.verify
               #   "access_token" : mfaQuestion.mfa.access_token
               #   "mfa_answer" : "test_answer"
 

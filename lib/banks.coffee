@@ -1,6 +1,8 @@
+# from https://synapsepay.com/api/v3/institutions/show
+#
 # in order of size
 # https://en.wikipedia.org/wiki/List_of_largest_banks_in_the_United_States
-
+#
 # TODO order by # of customers with checking accounts
 
 @SynapsePay.banks = [

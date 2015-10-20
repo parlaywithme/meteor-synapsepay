@@ -25,5 +25,5 @@ Package.onTest(function(api) {
   api.use('coffeescript');
   api.use('mike:mocha-package');
   api.use('parlay:synapsepay');
-  api.addFiles('synapsepay-tests.coffee', 'server');
+  api.addFiles('tests.coffee', 'server');
 });
