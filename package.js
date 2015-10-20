@@ -1,20 +1,29 @@
 Package.describe({
   name: 'parlay:synapsepay',
-  version: '0.0.1',
+  version: '0.0.9',
   summary: 'synapse_pay_rest for Meteor',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
 });
 
+Npm.depends({
+  synapse_pay_rest: "0.0.9"
+});
+
 Package.onUse(function(api) {
   api.versionsFrom('1.2.0.2');
   api.use('coffeescript');
-  api.addFiles('synapsepay.coffee');
+  api.addFiles([
+    'lib/synapsepay.coffee',
+    'lib/banks.coffee'
+  ], 'server');
+  // TODO why does this cause it to be undefined?
+  // api.export('SynapsePay', 'server');
 });
 
 Package.onTest(function(api) {
   api.use('coffeescript');
   api.use('mike:mocha-package');
   api.use('parlay:synapsepay');
-  api.addFiles('synapsepay-tests.coffee');
+  api.addFiles('synapsepay-tests.coffee', 'server');
 });
