@@ -34,13 +34,16 @@ synapse.users.refresh refresh_token: user.refresh_token
 # now `synapse` will send user's id and oauth_key in headers of subsequent
 # requests
 
-questions = synapse.users.addDoc kyc
-user = synapse.users.answerKBA answers
-# if user.permission isn't 'RECEIVE', repeat KBA
+response = synapse.users.addDoc kyc
+if response says invalid kyc
+  synapse.users.attachFile governmentID
+else if response has KBA questions
+  user = synapse.users.answerKBA answers
+  # if user.permission isn't 'RECEIVE', repeat KBA
 
 # if you need user to have SEND permissions (be able to debit from their bank
 # account)
-user = synapse.users.attachFile file
+user = synapse.users.attachFile picOrGovernmentID
 # now user.permission will be 'SEND-AND-RECEIVE'
 ```
 
@@ -87,6 +90,8 @@ txn = synapse.trans.create fromNode._id, txnData
 ```
 
 ## Banks
+
+If you're not using their [bank login widget](https://synapsepay.com/examples/linkbank), then you'll need the list of banks they support:
 
 ```coffeescript
 @SynapsePay.banks = [
