@@ -51,8 +51,8 @@ class @SynapsePay
     capital_endpoint = endpoint.charAt(0).toUpperCase() +
       endpoint.slice 1
 
-    @[endpoint][operation] = Meteor.wrapAsync (query, cb) ->
-      @client[capital_endpoint][operation] query, (response) ->
+    @[endpoint][operation] = Meteor.wrapAsync (args..., cb) ->
+      @client[capital_endpoint][operation] args..., (response) ->
         cb no, response
     , @
 

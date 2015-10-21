@@ -1,13 +1,13 @@
 Package.describe({
   name: 'parlay:synapsepay',
-  version: '0.0.9',
+  version: '0.0.14',
   summary: 'synapse_pay_rest for Meteor',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
 });
 
 Npm.depends({
-  synapse_pay_rest: "0.0.9"
+  synapse_pay_rest: "0.0.14"
 });
 
 Package.onUse(function(api) {

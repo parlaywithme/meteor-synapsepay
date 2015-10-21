@@ -1,7 +1,7 @@
 l = (x...) ->
   console.log y for y in x
 
-userId = '5625c0d186c27345244db50b'
+user_id = '5625c0d186c27345244db50b'
 
 # sandbox creds
 synapse = new SynapsePay
@@ -10,6 +10,9 @@ synapse = new SynapsePay
   development_mode: yes
   fingerprint: 'a'
   ip_address: '1.1.1.1'
+
+achNodeId = '562722af86c2736861713531'
+synNodeId = '5627287a86c27368699e55c7'
 
 bobData = {
     "logins" :  [
@@ -32,8 +35,7 @@ bobData = {
     }
 }
 
-bob = null
-bob2 = null
+bob = bob2 = bob3 = null
 # { _id: '5624519386c27302583ce976',
 #   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/5624519386c27302583ce976' } },
 #   client: { id: 1256, name: 'Parlay Tech' },
@@ -234,6 +236,30 @@ answers =
 
 ## NODE
 
+allNodes = null
+# { error_code: '0',
+#   http_code: '200',
+#   node_count: 2,
+#   nodes:
+#    [ { _id: '5627287a86c27368699e55c7',
+#        _links: [Object],
+#        allowed: 'CREDIT-AND-DEBIT',
+#        extra: [Object],
+#        info: [Object],
+#        is_active: true,
+#        type: 'SYNAPSE-US' },
+#      { _id: '5627288186c273686171353f',
+#        _links: [Object],
+#        allowed: 'CREDIT',
+#        extra: [Object],
+#        info: [Object],
+#        is_active: true,
+#        type: 'ACH-US' } ],
+#   page: 1,
+#   page_count: 1,
+#   success: true }
+
+
 synNodeData =
   "type" : "SYNAPSE-US",
   "info" : {
@@ -291,7 +317,136 @@ mfaQuestion = null
 
 
 achNumberNodeVerified = null
+# { _id: '5627224e86c273685db2f6ec',
+#   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/5627224786c273685db2f6ea/nodes/5627224e86c273685db2f6ec' } },
+#   allowed: 'CREDIT-AND-DEBIT',
+#   extra: { supp_id: '123sa' },
+#   info:
+#    { account_num: '5423',
+#      class: 'CHECKING',
+#      name_on_account: 'Ruby Library',
+#      nickname: 'Ruby Library Savings Account',
+#      routing_num: '0017',
+#      type: 'PERSONAL' },
+#   is_active: true,
+#   type: 'ACH-US' }
+
 achLoginNodeVerified = null
+# { error_code: '0',
+#   http_code: '200',
+#   nodes:
+#    [ { _id: '562722af86c2736861713531',
+#        _links: [Object],
+#        allowed: 'CREDIT-AND-DEBIT',
+#        extra: [Object],
+#        info: [Object],
+#        is_active: true,
+#        type: 'ACH-US' },
+#      { _id: '562722af86c2736861713532',
+#        _links: [Object],
+#        allowed: 'CREDIT-AND-DEBIT',
+#        extra: [Object],
+#        info: [Object],
+#        is_active: true,
+#        type: 'ACH-US' } ],
+#   success: true }
+
+txnData = {
+    "to" : {
+        "type" : "ACH-US",
+        "id" : achNodeId
+    },
+    "amount" : {
+        "amount" : 1.10,
+        "currency" : "USD"
+    },
+    "extra" : {
+        "supp_id" : "1283764wqwsdd34wd13212",
+        "note" : "Deposit to bank account",
+        "webhook" : "http://requestb.in/1g4vaj81",
+        "process_on" : 1,
+        "ip" : "192.168.0.1"
+    },
+    # "fees" : [{
+    #     "fee" : 1.00,
+    #     "note" : "Facilitator Fee",
+    #     "to" : {
+    #         "id" : "55d9287486c27365fe3776fb"
+    #     }
+    # }]
+}
+
+achTxn = null
+# { _id: '5628019286c2737503307112',
+#   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/5628018686c273750330710f/nodes/5628018c86c27375048c36b0/trans/5628019286c2737503307112' } },
+#   amount: { amount: 1.1, currency: 'USD' },
+#   client: { id: 1256, name: 'Parlay Tech' },
+#   extra:
+#    { created_on: 1445462418544,
+#      ip: '192.168.0.1',
+#      latlon: '0,0',
+#      note: 'Deposit to bank account',
+#      other: {},
+#      process_on: 1445548818545,
+#      supp_id: '1283764wqwsdd34wd13212',
+#      webhook: 'http://requestb.in/1g4vaj81' },
+#   fees: [ { fee: 0.2, note: 'Synapse Facilitator Fee', to: [Object] } ],
+#   from:
+#    { id: '5628018c86c27375048c36b0',
+#      nickname: 'Ruby Library Savings Account',
+#      type: 'ACH-US',
+#      user: { _id: '5628018686c273750330710f', legal_names: [Object] } },
+#   recent_status:
+#    { date: 1445462418544,
+#      note: 'Transaction created',
+#      status: 'CREATED',
+#      status_id: '1' },
+#   timeline:
+#    [ { date: 1445462418544,
+#        note: 'Transaction created',
+#        status: 'CREATED',
+#        status_id: '1' } ],
+#   to:
+#    { id: '562722af86c2736861713531',
+#      nickname: 'SynapsePay Test Checking Account',
+#      type: 'ACH-US',
+#      user: { _id: '562722a586c2736860a71d6e', legal_names: [Object] } } }
+
+synTxn = null
+# { _id: '5628026986c27375048c36b7',
+#   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/5628025e86c27375048c36b3/nodes/5628026586c27375048c36b5/trans/5628026986c27375048c36b7' } },
+#   amount: { amount: 1.1, currency: 'USD' },
+#   client: { id: 1256, name: 'Parlay Tech' },
+#   extra:
+#    { created_on: 1445462633452,
+#      ip: '192.168.0.1',
+#      latlon: '0,0',
+#      note: 'Deposit to bank account',
+#      other: {},
+#      process_on: 1445549033453,
+#      supp_id: '1283764wqwsdd34wd13212',
+#      webhook: 'http://requestb.in/1g4vaj81' },
+#   fees: [ { fee: 0.2, note: 'Synapse Facilitator Fee', to: [Object] } ],
+#   from:
+#    { id: '5628026586c27375048c36b5',
+#      nickname: 'My Synapse Wallet',
+#      type: 'SYNAPSE-US',
+#      user: { _id: '5628025e86c27375048c36b3', legal_names: [Object] } },
+#   recent_status:
+#    { date: 1445462633451,
+#      note: 'Transaction created',
+#      status: 'CREATED',
+#      status_id: '1' },
+#   timeline:
+#    [ { date: 1445462633451,
+#        note: 'Transaction created',
+#        status: 'CREATED',
+#        status_id: '1' } ],
+#   to:
+#    { id: '5627287a86c27368699e55c7',
+#      nickname: 'Default Synapse Node',
+#      type: 'SYNAPSE-US',
+#      user: { _id: '5627287a86c27368699e55c6', legal_names: [Object] } } }
 
 describe 'sanity', ->
   it 'is visible', ->
@@ -304,8 +459,8 @@ describe 'users', ->
     l 'bob', bob
 
   it 'gets single', ->
-    user = synapse.users.get {userId}
-    chai.assert.equal user._id, userId
+    user = synapse.users.get {user_id: bob._id}
+    chai.assert.equal user._id, bob._id
 
   it 'gets all', ->
     all = synapse.users.get {}
@@ -313,7 +468,7 @@ describe 'users', ->
     chai.assert.equal all.error_code, '0'
 
   it 'gets none', ->
-    none = synapse.users.get userId: 'a'
+    none = synapse.users.get user_id: 'a'
     chai.assert.equal none.error.en, 'The url is not found.'
 
   it 'creates', ->
@@ -324,34 +479,32 @@ describe 'users', ->
 
     before ->
       oauth = synapse.users.refresh refresh_token: bob.refresh_token
-      l 'client', synapse.client
 
     it 'can get key', ->
       chai.assert.isString oauth.oauth_key
 
-    describe 'with kba questions', ->
+    describe 'with kba', ->
+
+      @timeout 6 * 1000
 
       before ->
         questions = synapse.users.addDoc kyc
+        answers.doc.question_set_id = questions.question_set.id
+        bob2 = synapse.users.answerKBA answers
 
       it 'gets questions', ->
         chai.assert.isString questions.question_set.questions[0].question
 
       it 'accepts kba answers', ->
-        answers.doc.question_set_id = questions.question_set.id
-        user = synapse.users.answerKBA answers
-        chai.assert.equal user.permission, 'RECEIVE'
+        chai.assert.equal bob2.permission, 'RECEIVE'
 
       describe 'with full permissions', ->
 
-        @timeout 6 * 1000
-
         before ->
-          bob2 = synapse.users.attachFile 'https://s3.amazonaws.com/synapse_django/static_assets/marketing/images/synapse_dark.png'
+          bob3 = synapse.users.attachFile 'https://s3.amazonaws.com/synapse_django/static_assets/marketing/images/synapse_dark.png'
 
         it 'accepts ID', ->
-          chai.assert.equal bob2.permission, 'SEND-AND-RECEIVE'
-          l bob2
+          chai.assert.equal bob3.permission, 'SEND-AND-RECEIVE'
 
         describe 'nodes', ->
 
@@ -360,8 +513,8 @@ describe 'users', ->
             mfaQuestion = synapse.nodes.add usernamePassword
 
           it 'lists all', ->
-            # l synapse.nodes.get null
-            0
+            allNodes = synapse.nodes.get {}
+            chai.assert.isTrue allNodes.nodes.length > 0
 
           it 'creates type synapse', ->
             synNode = synapse.nodes.add synNodeData
@@ -375,22 +528,116 @@ describe 'users', ->
 
           describe 'verified nodes', ->
 
-            # @timeout 10 * 1000
-
             before ->
-              l achNumberNode
               achNumberNodeVerified = synapse.nodes.verify achNumberNode.nodes[0]._id,
                 micro: [.1, .1]
 
-              # achLoginNodeVerified = synapse.nodes.verify
-              #   "access_token" : mfaQuestion.mfa.access_token
-              #   "mfa_answer" : "test_answer"
-
-              # l achLoginNodeVerified
+              achLoginNodeVerified = synapse.nodes.add
+                "access_token" : mfaQuestion.mfa.access_token
+                "mfa_answer" : "test_answer"
 
             it 'verifies micro', ->
-              # l 'micro', achNumberNodeVerified
-              chai.assert.equal yes, yes
+              chai.assert.equal achNumberNodeVerified.allowed, 'CREDIT-AND-DEBIT'
 
-            # it 'verifies login', ->
-            #   l 'login', achLoginNodeVerified
+            it 'verifies login', ->
+              for node in achLoginNodeVerified.nodes
+                chai.assert.equal node.allowed, 'CREDIT-AND-DEBIT'
+
+            it 'deletes', ->
+              response = synapse.nodes.delete achLoginNodeVerified.nodes[0]._id
+              chai.assert.isTrue response.success
+
+            describe 'transactions', ->
+
+              @timeout 10 * 1000
+
+              before ->
+                achTxn = synapse.trans.create achNumberNodeVerified._id, txnData
+
+                txnData.to =
+                  type: 'SYNAPSE-US'
+                  id: synNodeId
+                synTxn = synapse.trans.create synNode.nodes[0]._id, txnData
+
+              it 'creates ach', ->
+                chai.assert.equal achTxn.recent_status.status, 'CREATED'
+
+              it 'creates syn', ->
+                chai.assert.equal synTxn.recent_status.status, 'CREATED'
+
+              it 'gets one', ->
+                l 'befoer', bob._id, achNumberNodeVerified._id, achTxn._id
+                txn = synapse.trans.get
+                  node_id: achNumberNodeVerified._id
+                , achTxn._id
+                l 'one', txn
+
+              it 'gets all', ->
+                all = synapse.trans.get node_id: achNumberNodeVerified._id
+                chai.assert.isTrue all.success
+
+# { error_code: '0',
+#   http_code: '200',
+#   page: 1,
+#   page_count: 1,
+#   success: true,
+#   trans:
+#    [ { _id: '5628063586c2737509116934',
+#        _links: [Object],
+#        amount: [Object],
+#        client: [Object],
+#        extra: [Object],
+#        fees: [Object],
+#        from: [Object],
+#        recent_status: [Object],
+#        timeline: [Object],
+#        to: [Object] } ],
+#   trans_count: 1 }
+
+              it 'updates', ->
+                response = synapse.trans.update achNumberNodeVerified._id
+                  , achTxn._id
+                  , comment: 'hi'
+
+                chai.assert.isTrue /REPLY: hi/.test response.trans.recent_status.note
+
+# { error_code: '0',
+#   http_code: '200',
+#   success: true,
+#   trans:
+#    { _id: '562804c886c27374fdd1d7d7',
+#      _links: { self: [Object] },
+#      amount: { amount: 1.1, currency: 'USD' },
+#      client: { id: 1256, name: 'Parlay Tech' },
+#      extra:
+#       { created_on: 1445463240205,
+#         ip: '192.168.0.1',
+#         latlon: '0,0',
+#         note: 'Deposit to bank account',
+#         other: {},
+#         process_on: 1445549640205,
+#         supp_id: '1283764wqwsdd34wd13212',
+#         webhook: 'http://requestb.in/1g4vaj81' },
+#      fees: [ [Object] ],
+#      from:
+#       { id: '562804c486c2737503307116',
+#         nickname: 'Ruby Library Savings Account',
+#         type: 'ACH-US',
+#         user: [Object] },
+#      recent_status:
+#       { date: 1445463240204,
+#         note: 'Transaction created. REPLY: hi',
+#         status: 'CREATED',
+#         status_id: '1' },
+#      timeline: [ [Object] ],
+#      to:
+#       { id: '562722af86c2736861713531',
+#         nickname: 'SynapsePay Test Checking Account',
+#         type: 'ACH-US',
+#         user: [Object] } } }
+
+              it 'deletes', ->
+                txn = synapse.trans.delete synNode.nodes[0]._id
+                  , synTxn._id
+
+                chai.assert.equal txn.recent_status.status, 'CANCELED'
