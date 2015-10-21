@@ -68,11 +68,23 @@ mfaQuestion = synapse.nodes.add usernamePassword
 response = synapse.nodes.add
   access_token: mfaQuestion.mfa.access_token
   mfa_answer: 'test_answer'
+
+# response.nodes has all accounts under that usernamePassword, each with
+# 'CREDIT-AND-DEBIT' permissions
 ```
 
 ### Make transactions
 
+```coffeescript
+txnData.to =
+  type: 'ACH-US'
+  id: toNode._id
 
+txn = synapse.trans.create fromNode._id, txnData
+
+# get transaction status updates at the webhook URL you provided with
+# txnData.extra.webhook
+```
 
 ## Banks
 
