@@ -56,6 +56,10 @@ class @SynapsePay
         cb no, response
     , @
 
-  users: {}
+  users:
+    createAndRefresh: (args...) ->
+      user = @create args...
+      @refresh refresh_token: user.refresh_token
+
   nodes: {}
   trans: {}

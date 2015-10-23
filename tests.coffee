@@ -11,7 +11,8 @@ synapse = new SynapsePay
   fingerprint: 'a'
   ip_address: '1.1.1.1'
 
-achNodeId = '562722af86c2736861713531'
+achNodeId = '5629b19586c273680d4b1ef4'
+# achNodeId = '562722af86c2736861713531'
 synNodeId = '5627287a86c27368699e55c7'
 
 bobData = {
@@ -287,7 +288,8 @@ accountNumbers =
   "info" : {
       "nickname" : "Ruby Library Savings Account",
       "name_on_account" : "Ruby Library",
-      "account_num" : "72347235423",
+      "account_num" : "123456789",
+      # "account_num" : "72347235423",
       "routing_num" : "051000017",
       "type" : "PERSONAL",
       "class" : "CHECKING"
@@ -452,11 +454,58 @@ describe 'sanity', ->
   it 'is visible', ->
     chai.assert.isDefined SynapsePay
 
-describe 'users', ->
+failure = null
+# { error: { en: 'Unable to verify document information. Please submit a valid copy of passport/driver\'s license.' },
+#   error_code: '400',
+#   http_code: '409',
+#   success: false }
+
+describe 'user fails verification', ->
+
+  @timeout 10 * 1000
+
+  before ->
+    synapse.users.createAndRefresh bobData
+    doc = _.clone kyc.doc
+    doc.document_value = '1111'
+    failure = synapse.users.addDoc {doc}
+
+  it 'fails', ->
+    chai.assert.isFalse failure.success
+
+success = null
+# { _id: '5629a61386c27368131d8ce0',
+#   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/5629a61386c27368131d8ce0' } },
+#   client: { id: 1256, name: 'Parlay Tech' },
+#   extra:
+#    { date_joined: 1445570067291,
+#      is_business: false,
+#      supp_id: '122eddfgbeafrfvbbb' },
+#   is_hidden: false,
+#   legal_names: [ 'bob testuser' ],
+#   logins: [ { email: 'javascriptTest@synapsepay.com', read_only: false } ],
+#   permission: 'RECEIVE',
+#   phone_numbers: [ '901.111.1111' ],
+#   photos: [],
+#   refresh_token: 'refresh-b73ebea4-7f0e-41b5-b589-b3a91e20b4a6' }
+
+describe 'user validates', ->
+
+  @timeout 10 * 1000
+
+  before ->
+    synapse.users.createAndRefresh bobData
+    doc = _.clone kyc.doc
+    doc.document_value = '2222'
+    success = synapse.users.addDoc {doc}
+
+  it 'succeeds', ->
+    chai.assert.equal success.permission, 'RECEIVE'
+
+describe 'kba user', ->
 
   before ->
     bob = synapse.users.create bobData
-    l 'bob', bob
 
   it 'gets single', ->
     user = synapse.users.get {user_id: bob._id}
@@ -566,11 +615,28 @@ describe 'users', ->
                 chai.assert.equal synTxn.recent_status.status, 'CREATED'
 
               it 'gets one', ->
-                l 'befoer', bob._id, achNumberNodeVerified._id, achTxn._id
                 txn = synapse.trans.get
                   node_id: achNumberNodeVerified._id
-                , achTxn._id
-                l 'one', txn
+                  trans_id: achTxn._id
+                chai.assert.equal txn.trans[0]._id, achTxn._id
+
+# { error_code: '0',
+#   http_code: '200',
+#   page: 1,
+#   page_count: 1,
+#   success: true,
+#   trans:
+#    [ { _id: '56298ca686c2734057a4c5ad',
+#        _links: [Object],
+#        amount: [Object],
+#        client: [Object],
+#        extra: [Object],
+#        fees: [Object],
+#        from: [Object],
+#        recent_status: [Object],
+#        timeline: [Object],
+#        to: [Object] } ],
+#   trans_count: 1 }
 
               it 'gets all', ->
                 all = synapse.trans.get node_id: achNumberNodeVerified._id

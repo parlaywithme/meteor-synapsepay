@@ -9,7 +9,7 @@ Wraps and adds to [SynapsePay](synapsepay.com)'s V3 node library [synapse_pay_re
     1. [Create accounts](#create-accounts)
       1. [Account numbers](#account-numbers)
       1. [Username password](#username-password)
-  1. [Make transactions](#make-transactions)
+    1. [Make transactions](#make-transactions)
   1. [Banks](#banks)
 1. [Dev](#dev)
   1. [Test](#test)
@@ -34,12 +34,14 @@ synapse.users.refresh refresh_token: user.refresh_token
 # now `synapse` will send user's id and oauth_key in headers of subsequent
 # requests
 
-response = synapse.users.addDoc kyc
-if response says invalid kyc
+user = synapse.users.addDoc kyc
+if not user.success
   synapse.users.attachFile governmentID
-else if response has KBA questions
+else if response.question_set?
   user = synapse.users.answerKBA answers
   # if user.permission isn't 'RECEIVE', repeat KBA
+else
+  # user.permission is 'RECEIVE'
 
 # if you need user to have SEND permissions (be able to debit from their bank
 # account)
@@ -49,7 +51,7 @@ user = synapse.users.attachFile picOrGovernmentID
 
 ### Create accounts
 
-(aka Nodes)
+Aka nodes. Sometimes these requests can take a few seconds to return, because SynapsePay has to hit slow bank APIs before they respond.
 
 #### Account numbers
 

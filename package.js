@@ -1,7 +1,7 @@
 Package.describe({
   name: 'parlay:synapsepay',
   version: '0.0.17',
-  summary: 'synapse_pay_rest for Meteor',
+  summary: 'Wraps and adds to synapse_pay_rest',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
 });
@@ -23,6 +23,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use('coffeescript');
+  api.use('underscore');
   api.use('mike:mocha-package');
   api.use('parlay:synapsepay');
   api.addFiles('tests.coffee', 'server');
