@@ -11,8 +11,10 @@ synapse = new SynapsePay
   fingerprint: 'a'
   ip_address: '1.1.1.1'
 
-achNodeId = '5629b19586c273680d4b1ef4'
-# achNodeId = '562722af86c2736861713531'
+# R08 returned
+# achNodeId = '5629b19586c273680d4b1ef4'
+
+achNodeId = '562722af86c2736861713531'
 synNodeId = '5627287a86c27368699e55c7'
 
 bobData = {
@@ -288,8 +290,16 @@ accountNumbers =
   "info" : {
       "nickname" : "Ruby Library Savings Account",
       "name_on_account" : "Ruby Library",
-      "account_num" : "123456789",
-      # "account_num" : "72347235423",
+      # R08 Payment Stopped
+      # "account_num" : "123456789",
+
+      # R10 Customer Advises Not Authorized
+      # "account_num" : "123456788",
+
+      # R20 Non-Transaction Account
+      # "account_num" : "123456787",
+
+      "account_num" : "72347235423",
       "routing_num" : "051000017",
       "type" : "PERSONAL",
       "class" : "CHECKING"
@@ -359,14 +369,18 @@ txnData = {
         "id" : achNodeId
     },
     "amount" : {
-        "amount" : 1.10,
-        "currency" : "USD"
+      # causes cb SETTLED, then recent_status:
+      # "status": "RETURNED", "note": "R01 --- Insufficient Funds...
+      # "amount" : 222.22,
+
+      "amount" : 1.10,
+      "currency" : "USD"
     },
     "extra" : {
         "supp_id" : "1283764wqwsdd34wd13212",
         "note" : "Deposit to bank account",
-        "webhook" : "http://requestb.in/1g4vaj81",
-        "process_on" : 1,
+        "webhook" : 'http://requestb.in/12t84t51',
+        "process_on" : 0,
         "ip" : "192.168.0.1"
     },
     # "fees" : [{
@@ -606,12 +620,15 @@ describe 'kba user', ->
                 txnData.to =
                   type: 'SYNAPSE-US'
                   id: synNodeId
+                txnData.extra.process_on = 1 # process later
                 synTxn = synapse.trans.create synNode.nodes[0]._id, txnData
 
               it 'creates ach', ->
+                # l 'achTxn', achTxn
                 chai.assert.equal achTxn.recent_status.status, 'CREATED'
 
               it 'creates syn', ->
+                # l 'synTxn', synTxn
                 chai.assert.equal synTxn.recent_status.status, 'CREATED'
 
               it 'gets one', ->
@@ -707,3 +724,105 @@ describe 'kba user', ->
                   , synTxn._id
 
                 chai.assert.equal txn.recent_status.status, 'CANCELED'
+
+
+# example webhook:
+#  {
+#     "from": {
+#         "type": "ACH-US",
+#         "id": {
+#             "$oid": "562a9e0886c27366aaa4a3ed"
+#         }
+#     },
+#     "extra": {
+#         "ip": "192.168.0.1",
+#         "supp_id": "1283764wqwsdd34wd13212",
+#         "webhook": "http:\/\/requestb.in\/1i1eyv21",
+#         "process_on": {
+#             "$date": 1445633548349
+#         },
+#         "note": "Deposit to bank account",
+#         "created_on": {
+#             "$date": 1445633548349
+#         },
+#         "other": null
+#     },
+#     "timeline": [
+#         {
+#             "date": {
+#                 "$date": 1445633548348
+#             },
+#             "status": "CREATED",
+#             "note": "Transaction created. REPLY: hi",
+#             "status_id": "1"
+#         },
+#         {
+#             "date": {
+#                 "$date": 1445634302297
+#             },
+#             "status": "PROCESSING-DEBIT",
+#             "note": "Transaction debit being processed.",
+#             "status_id": "2"
+#         },
+#         {
+#             "date": {
+#                 "$date": 1445637902108
+#             },
+#             "status": "PROCESSING-CREDIT",
+#             "note": "Transaction credit being processed.",
+#             "status_id": "3"
+#         },
+#         {
+#             "date": {
+#                 "$date": 1445641501560
+#             },
+#             "status": "SETTLED",
+#             "note": "Transaction credit has been made.",
+#             "status_id": "4"
+#         },
+#         {
+#             "date": {
+#                 "$date": 1445641501658
+#             },
+#             "status": "RETURNED",
+#             "note": "R08 --- Payment Stopped. Money will be pulled back from 5629b19586c273680d4b1ef4",
+#             "status_id": "6"
+#         }
+#     ],
+#     "to": {
+#         "type": "ACH-US",
+#         "id": {
+#             "$oid": "5629b19586c273680d4b1ef4"
+#         }
+#     },
+#     "amount": {
+#         "currency": "USD",
+#         "amount": 1.1
+#     },
+#     "client": {
+#         "id": 1256,
+#         "name": "Parlay Tech"
+#     },
+#     "fees": [
+#         {
+#             "note": "Synapse Facilitator Fee",
+#             "to": {
+#                 "id": {
+#                     "$oid": "559339aa86c273605ccd35df"
+#                 }
+#             },
+#             "fee": 0.2
+#         }
+#     ],
+#     "_id": {
+#         "$oid": "562a9e0c86c27366aaa4a3ee"
+#     },
+#     "recent_status": {
+#         "date": {
+#             "$date": 1445641501658
+#         },
+#         "status": "RETURNED",
+#         "note": "R08 --- Payment Stopped. Money will be pulled back from 5629b19586c273680d4b1ef4",
+#         "status_id": "6"
+#     }
+# }

@@ -10,6 +10,7 @@ Wraps and adds to [SynapsePay](synapsepay.com)'s V3 node library [synapse_pay_re
       1. [Account numbers](#account-numbers)
       1. [Username password](#username-password)
     1. [Make transactions](#make-transactions)
+  1. [Constants](#constants)
   1. [Banks](#banks)
 1. [Dev](#dev)
   1. [Test](#test)
@@ -91,12 +92,34 @@ txn = synapse.trans.create fromNode._id, txnData
 # txnData.extra.webhook
 ```
 
+## Constants
+
+```coffeescript
+SynapsePay.documentTypes =
+  SSN:
+    code: 'SSN'
+    displayText: 'Social Security Number (last 4)'
+  ...
+
+  all: -> [
+    @SSN
+    @PASSPORT
+    @DRIVERS_LICENSE
+    @PERSONAL_IDENTIFICATION
+  ]
+
+  US: -> [
+    @SSN
+    @DRIVERS_LICENSE
+  ]
+```
+
 ## Banks
 
 If you're not using their [bank login widget](https://synapsepay.com/examples/linkbank), then you'll need the list of banks they support:
 
 ```coffeescript
-@SynapsePay.banks = [
+SynapsePay.banks = [
   {
     code: "bofa"
     name: "Bank of America"

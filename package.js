@@ -1,22 +1,32 @@
 Package.describe({
   name: 'parlay:synapsepay',
-  version: '0.0.17',
+  version: '0.0.18',
   summary: 'Wraps and adds to synapse_pay_rest',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
 });
 
 Npm.depends({
-  synapse_pay_rest: "0.0.17"
+  synapse_pay_rest: "0.0.18"
 });
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.0.2');
   api.use('coffeescript');
+
   api.addFiles([
-    'lib/synapsepay.coffee',
-    'lib/banks.coffee'
+    'client/synapsepay.coffee'
+  ], 'client');
+
+  api.addFiles([
+    'server/synapsepay.coffee'
   ], 'server');
+
+  api.addFiles([
+    'lib/banks.coffee',
+    'lib/constants.coffee'
+  ]);
+
   // TODO why does this cause it to be undefined?
   // api.export('SynapsePay', 'server');
 });
