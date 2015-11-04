@@ -23,6 +23,30 @@ Endpoints, arguments, and responses mirror the [V3 REST API](http://docs.synapse
 
 See example arguments and response data in [tests.coffee](https://github.com/parlaywithme/meteor-synapsepay/blob/master/tests.coffee)
 
+## Setup
+
+There are three options for setting your SynapsePay `client_id` and `client_secret`:
+
+```
+# settings.json
+{
+  "synapsepay": {
+    "id": "fakeid"
+    "secret": "fakesecret"
+  }
+}
+
+# global init function
+SynapsePay.init('fakeid', 'fakesecret')
+
+# include with every client creation
+client = new SynapsePay
+  client_id: 'fakeid'
+  client_secret: 'fakesecret'
+  ip_address: '...'
+  ...
+```
+
 ## Flow
 
 ### Create users

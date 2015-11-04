@@ -28,6 +28,8 @@ class @SynapsePay
       'delete'
     ]
 
+  @init: (@id, @secret) ->
+
   constructor: (@opts, @userId) ->
     {
       @client_id
@@ -37,6 +39,9 @@ class @SynapsePay
       @ip_address
       @development_mode
     } = @opts
+
+    @client_id or= SynapsePay.id or Meteor.settings?.synapsepay?.id
+    @client_secret or= SynapsePay.secret or Meteor.settings?.synapsepay?.secret
 
     @client = SynapsePayNpm @opts, @userId
 
