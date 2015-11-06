@@ -30,18 +30,9 @@ class @SynapsePay
 
   @init: (@id, @secret) ->
 
-  constructor: (@opts, @userId) ->
-    {
-      @client_id
-      @client_secret
-      @oauth_key
-      @fingerprint
-      @ip_address
-      @development_mode
-    } = @opts
-
-    @client_id or= SynapsePay.id or Meteor.settings?.synapsepay?.id
-    @client_secret or= SynapsePay.secret or Meteor.settings?.synapsepay?.secret
+  constructor: (@opts = {}, @userId) ->
+    @opts.client_id or= SynapsePay.id or Meteor.settings?.synapsepay?.id
+    @opts.client_secret or= SynapsePay.secret or Meteor.settings?.synapsepay?.secret
 
     @client = SynapsePayNpm @opts, @userId
 

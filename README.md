@@ -4,6 +4,9 @@ Wraps and adds to [SynapsePay](synapsepay.com)'s V3 node library [synapse_pay_re
 
 1. [Use](#use)
   1. [Example data](#example-data)
+  1. [Setup](#setup)
+    1. [IP address](#ip-address)
+    1. [Fingerprint](#fingerprint)
   1. [Flow](#flow)
     1. [Create users](#create-users)
     1. [Create accounts](#create-accounts)
@@ -27,24 +30,51 @@ See example arguments and response data in [tests.coffee](https://github.com/par
 
 There are three options for setting your SynapsePay `client_id` and `client_secret`:
 
-```
-# settings.json
+```coffeescript
+# 1. settings.json
 {
   "synapsepay": {
     "id": "fakeid"
     "secret": "fakesecret"
   }
 }
+# then in code:
+client = new SynapsePay opts
 
-# global init function
+# 2. global init function
 SynapsePay.init('fakeid', 'fakesecret')
+client = new SynapsePay opts
 
-# include with every client creation
+# 3. include with every client creation
 client = new SynapsePay
   client_id: 'fakeid'
   client_secret: 'fakesecret'
   ip_address: '...'
   ...
+```
+
+### IP address
+
+Inside methods, the IP address can be obtained from `this.connection.clientAddress`.
+
+### Fingerprint
+
+One option is to save a random string in each browser and send the string along to any methods that need it.
+TODO
+
+```coffeescript
+# client.coffee
+unless localStorage.getItem 'browserId'
+  localStorage.setItem 'browserId', Random.id 20
+
+Meteor.call 'foo', localStorage.getItem 'browserId'
+
+# server.coffee
+Meteor.methods
+  foo: (browserId) ->
+    client = new SynapsePay
+      ip_address: @connection.clientAddress
+      fingerprint: browserId
 ```
 
 ## Flow
