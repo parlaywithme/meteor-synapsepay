@@ -38,6 +38,13 @@ class @SynapsePay
 
     @wrapAsyncAll()
 
+    if @userId and not @opts.dontRefresh
+      user = @users.get
+        user_id: @userId
+
+      @users.refresh refresh_token: user.refresh_token
+      # now @client.Client.clientOptions.oauth_key is filled in
+
   wrapAsyncAll: ->
     for endpoint, operations of SynapsePay.API
       for operation in operations

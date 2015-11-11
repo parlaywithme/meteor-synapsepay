@@ -28,6 +28,8 @@ See example arguments and response data in [tests.coffee](https://github.com/par
 
 ## Setup
 
+### Keys
+
 There are three options for setting your SynapsePay `client_id` and `client_secret`:
 
 ```coffeescript
@@ -75,6 +77,20 @@ Meteor.methods
     client = new SynapsePay
       ip_address: @connection.clientAddress
       fingerprint: browserId
+```
+
+### User
+
+When hitting a `nodes.*` or `transactions.*` endpoint, the `client` must be created with a user id, and it must have requested an oauth token. Retrieving an oauth token is done automatically for you. If you'd like to do this yourself, use the `dontRefresh: true` option:
+
+```
+client = new SynapsePay
+  ...
+  dontRefresh: true
+, userId
+
+user = client.users.get user_id: userId
+client.users.refresh refresh_token: user.refresh_token
 ```
 
 ## Flow
