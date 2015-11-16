@@ -110,7 +110,7 @@ if not user.success
   synapse.users.attachFile governmentID
 else if response.question_set?
   user = synapse.users.answerKBA answers
-  # if user.permission isn't 'RECEIVE', repeat KBA
+  # user.permission is 'RECEIVE'
 else
   # user.permission is 'RECEIVE'
 
@@ -140,10 +140,12 @@ node = response.nodes[0]
 #### Username password
 
 ```coffeescript
-mfaQuestion = synapse.nodes.add usernamePassword
-response = synapse.nodes.add
-  access_token: mfaQuestion.mfa.access_token
-  mfa_answer: 'test_answer'
+response = synapse.nodes.add usernamePassword
+if response.mfa?
+  mfaQuestion = response
+  response = synapse.nodes.add
+    access_token: mfaQuestion.mfa.access_token
+    mfa_answer: 'test_answer'
 
 # response.nodes has all accounts under that usernamePassword, each with
 # 'CREDIT-AND-DEBIT' permissions
@@ -193,7 +195,9 @@ SynapsePay.banks = [
   {
     code: "bofa"
     name: "Bank of America"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/bofa.png"
+    logo:
+      file: "bofa"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/bofa.png"
   }
   ...
 ]

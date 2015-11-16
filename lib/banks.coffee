@@ -9,81 +9,113 @@
   {
     code: "bofa"
     name: "Bank of America"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/bofa.png"
+    logo:
+      file: "bofa"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/bofa.png"
   }
   {
     code: "chase"
     name: "Chase"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/chase.png"
+    logo:
+      file: "chase"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/chase.png"
   }
   {
     code: "citi"
     name: "Citibank"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/citi.png"
+    logo:
+      file: "citi"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/citi.png"
   }
   {
     code: "wells"
     name: "Wells Fargo"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/wells_fargo.png"
+    logo:
+      file: "wells_fargo"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/wells_fargo.png"
   }
   {
     code: "capone360"
     name: "Capital One 360"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/cap360.png"
+    logo:
+      file: "cap360"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/cap360.png"
   }
   {
     code: "pnc"
     name: "PNC"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/pnc.png"
+    logo:
+      file: "pnc"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/pnc.png"
   }
   {
     code: "td"
     name: "TD Bank"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/td.png"
+    logo:
+      file: "td"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/td.png"
   }
   {
     code: "bbt"
     name: "BB&T Bank"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/bbt.png"
+    logo:
+      file: "bbt"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/bbt.png"
   }
   {
     code: "suntrust"
     name: "SunTrust"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/suntrust.png"
+    logo:
+      file: "suntrust"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/suntrust.png"
   }
   {
     code: "ally"
     name: "Ally"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/ally.png"
+    logo:
+      file: "ally"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/ally.png"
   }
   {
     code: "schwab"
     name: "Charles Schwab"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/charles_schwab.png"
+    logo:
+      file: "charles_schwab"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/charles_schwab.png"
   }
   {
     code: "fidelity"
     name: "Fidelity"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/fidelity.png"
+    logo:
+      file: "fidelity"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/fidelity.png"
   }
   {
     code: "regions"
     name: "Regions"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/regionsbank.png"
+    logo:
+      file: "regionsbank"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/regionsbank.png"
   }
   {
     code: "us"
     name: "US Bank"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/usbank.png"
+    logo:
+      file: "usbank"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/usbank.png"
   }
   {
     code: "usaa"
     name: "USAA"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/usaa.png"
+    logo:
+      file: "usaa"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/usaa.png"
   }
   {
     code: "firsttennessee"
     name: "First Tennessee"
-    logo: "https://s3.amazonaws.com/synapse_django/bank_logos/first_tn.png"
+    logo:
+      file: "first_tn"
+      url: "https://s3.amazonaws.com/synapse_django/bank_logos/first_tn.png"
   }
 ]
