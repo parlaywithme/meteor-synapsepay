@@ -1,6 +1,6 @@
 `meteor add parlay:synapsepay`
 
-Wraps and adds to [SynapsePay](synapsepay.com)'s V3 node library [synapse_pay_rest](https://github.com/synapsepay/SynapsePayRest-Node).
+Wraps and adds to [SynapsePay](synapsepay.com)'s API V3 node library [synapse_pay_rest](https://github.com/synapsepay/SynapsePayRest-Node).
 
 1. [Use](#use)
   1. [Example data](#example-data)
@@ -201,6 +201,14 @@ SynapsePay.banks = [
   }
   ...
 ]
+```
+
+Helper functions:
+
+```
+SynapsePay.banks.get code: 'bofa'
+SynapsePay.banks.get name: 'Bank of America'
+SynapsePay.banks.isValid code: 'bofa'
 ```
 
 # Dev

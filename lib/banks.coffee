@@ -119,3 +119,14 @@
       url: "https://s3.amazonaws.com/synapse_django/bank_logos/first_tn.png"
   }
 ]
+
+@SynapsePay.banks.get = (term) ->
+  check term, Match.OneOf
+    code: String
+  ,
+    name: String
+
+  _.findWhere @, term
+
+@SynapsePay.banks.isValid = (term) ->
+  !! @get term
