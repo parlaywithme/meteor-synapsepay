@@ -121,12 +121,21 @@
 ]
 
 @SynapsePay.banks.get = (term) ->
+  if typeof term is 'string'
+    term = code: term
+
   check term, Match.OneOf
     code: String
   ,
     name: String
 
-  _.findWhere @, term
+  if term.code is 'fake'
+    bank = _.clone @[0]
+    bank.code = 'fake'
+    bank.name = 'Fake testing bank'
+    bank
+  else
+    _.findWhere @, term
 
 @SynapsePay.banks.isValid = (term) ->
   !! @get term
