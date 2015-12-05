@@ -121,6 +121,8 @@
 ]
 
 @SynapsePay.banks.get = (term) ->
+  return unless term
+
   if typeof term is 'string'
     term = code: term
 

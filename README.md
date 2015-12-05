@@ -122,7 +122,7 @@ user = synapse.users.attachFile picOrGovernmentID
 
 ### Create accounts
 
-Aka nodes. Sometimes these requests can take a few seconds to return, because SynapsePay has to hit slow bank APIs before they respond.
+Aka nodes. Sometimes these requests can take a few seconds to return, because SynapsePay has to hit slow bank APIs before they can respond to you.
 
 #### Account numbers
 

@@ -289,7 +289,7 @@ accountNumbers =
   "type" : "ACH-US",
   "info" : {
       "nickname" : "Ruby Library Savings Account",
-      "name_on_account" : "Ruby Library",
+
       # R08 Payment Stopped
       # "account_num" : "123456789",
 
@@ -474,6 +474,26 @@ failure = null
 #   http_code: '409',
 #   success: false }
 
+then_success = null
+# { _id: '565fe1dd86c2733694f8ef9d',
+#   _links: { self: { href: 'https://sandbox.synapsepay.com/api/3/users/565fe1dd86c2733694f8ef9d' } },
+#   client: { id: 1256, name: 'Parlay Tech' },
+#   doc_status:
+#    { physical_doc: 'SUBMITTED|REVIEWING',
+#      virtual_doc: 'SUBMITTED|INVALID' },
+#   extra:
+#    { date_joined: 1449124317289,
+#      extra_security: true,
+#      is_business: false,
+#      supp_id: '122eddfgbeafrfvbbb' },
+#   is_hidden: false,
+#   legal_names: [ 'bob testuser' ],
+#   logins: [ { email: 'javascriptTest@synapsepay.com', read_only: false } ],
+#   permission: 'SEND-AND-RECEIVE',
+#   phone_numbers: [ '901.111.1111' ],
+#   photos: [],
+#   refresh_token: 'refresh-1ea3fbba-9e17-42b9-a7f7-e3c6a97390cf' }
+
 describe 'user fails verification', ->
 
   @timeout 10 * 1000
@@ -486,6 +506,15 @@ describe 'user fails verification', ->
 
   it 'fails', ->
     chai.assert.isFalse failure.success
+
+  describe 'base64 doc uploads', ->
+
+    before ->
+      then_success = synapse.users.addDoc
+        doc: attachment: 'data:text/csv;base64,SUQs=='
+
+    it 'succeeds', ->
+      chai.assert.equal then_success.permission, 'SEND-AND-RECEIVE'
 
 success = null
 # { _id: '5629a61386c27368131d8ce0',
