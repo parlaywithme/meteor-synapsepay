@@ -12,9 +12,12 @@ Wraps and adds to [SynapsePay](synapsepay.com)'s API V3 node library [synapse_pa
     1. [Create accounts](#create-accounts)
       1. [Account numbers](#account-numbers)
       1. [Username password](#username-password)
-    1. [Make transactions](#make-transactions)
+    1. [Transactions](#transactions)
+      1. [Create](#create)
+      1. [Receive updates](#receive-updates)
   1. [Constants](#constants)
-  1. [Banks](#banks)
+    1. [Document types](#document-types)
+    1. [Banks](#banks)
 1. [Dev](#dev)
   1. [Test](#test)
 
@@ -151,20 +154,41 @@ if response.mfa?
 # 'CREDIT-AND-DEBIT' permissions
 ```
 
-### Make transactions
+### Transactions
+
+#### Create
 
 ```coffeescript
 txnData.to =
   type: 'ACH-US'
   id: toNode._id
 
-txn = synapse.trans.create fromNode._id, txnData
+txnData.extra.webhook = 'www.myapp.com/synapse/transactions'
 
-# get transaction status updates at the webhook URL you provided with
-# txnData.extra.webhook
+txn = synapse.trans.create fromNode._id, txnData
+```
+
+#### Receive updates
+
+Using package `simple:json-routes`:
+
+```coffeescript
+JsonRoutes.add 'post', '/synapse/transactions', (req, res, next) ->
+  txn = req.body
+  signature = req.headers['x-synapse-signature']
+  hash = new SynapsePay().client.Client.createHMAC txn
+
+  unless signature is hash
+    throw new Meteor.Error 'bad-sig'
+
+  ...
+
+  JsonRoutes.sendResult res, 200
 ```
 
 ## Constants
+
+### Document types
 
 ```coffeescript
 SynapsePay.documentTypes =
@@ -186,7 +210,7 @@ SynapsePay.documentTypes =
   ]
 ```
 
-## Banks
+### Banks
 
 If you're not using their [bank login widget](https://synapsepay.com/examples/linkbank), then you'll need the list of banks they support:
 
@@ -226,4 +250,4 @@ meteor add parlay:synapsepay
 meteor test-packages --driver-package velocity:console-reporter parlay:synapsepay
 ```
 
-Then reload `localhost:3000` to run tests - output in server console.
+Then reload `localhost:3000` to run tests - output in server console. Some logged errors are expected (409 and 404).
