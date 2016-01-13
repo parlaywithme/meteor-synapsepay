@@ -63,6 +63,7 @@ class @SynapsePay
     createAndRefresh: (args...) ->
       user = @create args...
       @refresh refresh_token: user.refresh_token
+      user
 
   nodes: {}
   trans: {}
