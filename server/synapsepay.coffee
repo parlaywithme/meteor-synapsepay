@@ -28,10 +28,7 @@ class @SynapsePay
       'delete'
     ]
 
-  @inDevelopment: ->
-    @inDevelopment = yes
-
-  @init: (@id, @secret) ->
+  @init: (@id, @secret, @inDevelopment) ->
 
   @getClient: (method, user_id, opts) ->
     method.connection.synapsepay.client or= new SynapsePay method, user_id, opts

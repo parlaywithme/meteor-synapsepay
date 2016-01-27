@@ -1,6 +1,6 @@
 Package.describe({
   name: 'parlay:synapsepay',
-  version: '0.0.18_9',
+  version: '0.0.18_10',
   summary: 'Wraps and adds to synapse_pay_rest',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
