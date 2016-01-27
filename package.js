@@ -1,6 +1,6 @@
 Package.describe({
   name: 'parlay:synapsepay',
-  version: '0.0.18_8',
+  version: '0.0.18_9',
   summary: 'Wraps and adds to synapse_pay_rest',
   git: 'https://github.com/parlaywithme/meteor-synapsepay',
   documentation: 'README.md'
@@ -15,13 +15,15 @@ Package.onUse(function(api) {
   api.use('coffeescript');
   api.use('underscore');
   api.use('check');
+  api.use('random');
 
   api.addFiles([
     'client/synapsepay.coffee'
   ], 'client');
 
   api.addFiles([
-    'server/synapsepay.coffee'
+    'server/synapsepay.coffee',
+    'server/fingerprint.coffee'
   ], 'server');
 
   api.addFiles([

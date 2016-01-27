@@ -1,7 +1,15 @@
 @SynapsePay = {}
 
-# unless localStorage.getItem 'browserId'
-#   localStorage.setItem 'browserId', Random.id 20
+browserId = ->
+  localStorage.getItem 'synapsepay.browserId'
 
-# # Tracker.autorun (c) ->
-# Meteor.call 'synapsepay.setDeviceId', #localStorage.getItem 'browserId'
+submitFingerprint = ->
+  Meteor.call 'synapsepay.submitFingerprint', browserId()
+
+
+unless browserId()
+  localStorage.setItem 'synapsepay.browserId', Random.id 20
+
+submitFingerprint()
+
+Meteor.connection.onReconnect = submitFingerprint

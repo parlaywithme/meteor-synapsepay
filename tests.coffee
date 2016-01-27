@@ -3,13 +3,15 @@ l = (x...) ->
 
 user_id = '5625c0d186c27345244db50b'
 
+SynapsePay.init 'id-ce2646b8-23eb-4219-8775-c459b29977bb', 'secret-04936235-c82a-47c8-8fe5-daff8e5d03bc'
+SynapsePay.inDevelopment()
+
 # sandbox creds
 synapse = new SynapsePay
-  client_id: 'id-ce2646b8-23eb-4219-8775-c459b29977bb'
-  client_secret: 'secret-04936235-c82a-47c8-8fe5-daff8e5d03bc'
-  development_mode: yes
-  fingerprint: 'a'
-  ip_address: '1.1.1.1'
+  connection:
+    clientAddress: '1.1.1.1'
+    synapsepay:
+      fingerprint: 'aaa'
 
 # R08 returned
 # achNodeId = '5629b19586c273680d4b1ef4'
@@ -496,7 +498,7 @@ then_success = null
 
 describe 'user fails verification', ->
 
-  @timeout 10 * 1000
+  @timeout 15 * 1000
 
   before ->
     synapse.users.createAndRefresh bobData
@@ -537,7 +539,7 @@ success = null
 
 describe 'user validates', ->
 
-  @timeout 10 * 1000
+  @timeout 15 * 1000
 
   before ->
     synapse.users.createAndRefresh bobData
@@ -550,8 +552,9 @@ describe 'user validates', ->
 
 describe 'kba user', ->
 
+  @timeout 15 * 1000
+
   before ->
-    @timeout 4000
     bob = synapse.users.create bobData
 
   it 'gets single', ->
@@ -581,7 +584,7 @@ describe 'kba user', ->
 
     describe 'with kba', ->
 
-      @timeout 8 * 1000
+      @timeout 10 * 1000
 
       before ->
         questions = synapse.users.addDoc kyc
