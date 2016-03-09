@@ -1,6 +1,3 @@
-@l = (x...) ->
-  console.log y for y in x
-
 @SynapsePayNpm = Npm.require 'synapse_pay_rest'
 
 class @SynapsePay
@@ -29,9 +26,18 @@ class @SynapsePay
     ]
 
   @init: (@id, @secret, @inDevelopment) ->
+    0
 
-  @getClient: (method, user_id, opts) ->
-    method.connection.synapsepay.client or= new SynapsePay method, user_id, opts
+  @getClient: (method, userId, opts) ->
+    # console.log 'getClient ' + userId, method.connection?.synapsepay, opts
+    method.connection.synapsepay or = {}
+    if method.connection.synapsepay.client?
+      unless method.connection.synapsepay.client.userId is userId
+        # console.log 'synapse: creating new client'
+        method.connection.synapsepay.client = new SynapsePay method, userId, opts
+      method.connection.synapsepay.client
+    else
+      method.connection.synapsepay.client = new SynapsePay method, userId, opts
 
   constructor: (method, @userId, @opts = {}) ->
     @opts.client_id or= SynapsePay.id or Meteor.settings?.synapsepay?.id
@@ -67,7 +73,7 @@ class @SynapsePay
     makeCall = (args, cb) =>
       @client[capital_endpoint][operation] args..., (response) =>
         invalid_oauth = response.error_code is '110' and
-          /oauth_key/.test(response.error.en) and
+          /Invalid oauth_key/.test(response.error.en) and
           @userId
 
         if invalid_oauth
@@ -75,8 +81,10 @@ class @SynapsePay
           @client.Users.get
             user_id: @userId
           , ({refresh_token}) =>
-            @client.Users.refresh {refresh_token}, =>
-              makeCall args, cb
+            if refresh_token
+              err 'invalid-oauth', refresh_token, endpoint, operation, args
+              @client.Users.refresh {refresh_token}, =>
+                makeCall args, cb
 
           return
 
