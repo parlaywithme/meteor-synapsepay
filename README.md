@@ -95,6 +95,14 @@ client.users.refresh refresh_token: user.refresh_token
 
 ## Flow
 
+- [Create users](#create-users)
+- [Create accounts](#create-accounts)
+  - [Account numbers](#account-numbers)
+  - [Username password](#username-password)
+- [Transactions](#transactions)
+  - [Create](#create)
+  - [Receive updates](#receive-updates)
+
 ### Create users
 
 ```coffeescript
