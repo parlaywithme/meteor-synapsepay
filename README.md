@@ -2,33 +2,26 @@
 
 Wraps and adds to [SynapsePay](synapsepay.com)'s API V3 node library [synapse_pay_rest](https://github.com/synapsepay/SynapsePayRest-Node).
 
-1. [Use](#use)
-  1. [Example data](#example-data)
-  1. [Setup](#setup)
-    1. [getClient](#getclient)
-    1. [Keys](#keys)
-    1. [User](#user)
-  1. [Flow](#flow)
-    1. [Create users](#create-users)
-    1. [Create accounts](#create-accounts)
-      1. [Account numbers](#account-numbers)
-      1. [Username password](#username-password)
-    1. [Transactions](#transactions)
-      1. [Create](#create)
-      1. [Receive updates](#receive-updates)
-  1. [Constants](#constants)
-    1. [Document types](#document-types)
-    1. [Banks](#banks)
-1. [Dev](#dev)
-  1. [Test](#test)
-
-# Use
+- [Setup](#setup)
+  - [getClient](#getclient)
+  - [Keys](#keys)
+  - [User](#user)
+- [Flow](#flow)
+  - [Create users](#create-users)
+  - [Create accounts](#create-accounts)
+    - [Account numbers](#account-numbers)
+    - [Username password](#username-password)
+  - [Transactions](#transactions)
+    - [Create](#create)
+    - [Receive updates](#receive-updates)
+- [Example data](#example-data)
+- [Constants](#constants)
+  - [Document types](#document-types)
+  - [Banks](#banks)
+- [Dev](#dev)
+  - [Test](#test)
 
 Endpoints, arguments, and responses mirror the [V3 REST API](http://docs.synapsepay.com/v3.1).
-
-## Example data
-
-See example arguments and response data in [tests.coffee](https://github.com/parlaywithme/meteor-synapsepay/blob/master/tests.coffee)
 
 ## Setup
 
@@ -190,6 +183,10 @@ JsonRoutes.add 'post', '/synapse/transactions', (req, res, next) ->
   JsonRoutes.sendResult res, 200
 ```
 
+## Example data
+
+See example arguments and response data in [tests.coffee](https://github.com/parlaywithme/meteor-synapsepay/blob/master/tests.coffee)
+
 ## Constants
 
 ### Document types
@@ -239,9 +236,9 @@ SynapsePay.banks.get name: 'Bank of America'
 SynapsePay.banks.isValid code: 'bofa'
 ```
 
-# Dev
+## Dev
 
-## Test
+### Test
 
 ```
 meteor create testapp
