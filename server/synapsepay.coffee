@@ -43,8 +43,8 @@ class @SynapsePay
     @opts.client_id or= SynapsePay.id or Meteor.settings?.synapsepay?.id
     @opts.client_secret or= SynapsePay.secret or Meteor.settings?.synapsepay?.secret
 
-    @opts.ip_address = method?.connection.clientAddress
-    @opts.fingerprint = method?.connection.synapsepay.fingerprint
+    @opts.ip_address or= method?.connection.clientAddress
+    @opts.fingerprint or= method?.connection.synapsepay.fingerprint
 
     if SynapsePay.inDevelopment
       @opts.development_mode = yes

@@ -5,8 +5,9 @@ Wraps and adds to [SynapsePay](synapsepay.com)'s API V3 node library [synapse_pa
 1. [Use](#use)
   1. [Example data](#example-data)
   1. [Setup](#setup)
-    1. [IP address](#ip-address)
-    1. [Fingerprint](#fingerprint)
+    1. [getClient](#getclient)
+    1. [Keys](#keys)
+    1. [User](#user)
   1. [Flow](#flow)
     1. [Create users](#create-users)
     1. [Create accounts](#create-accounts)
@@ -31,6 +32,36 @@ See example arguments and response data in [tests.coffee](https://github.com/par
 
 ## Setup
 
+### getClient
+
+`SynapsePay.getClient method, userId, opts`
+
+All arguments are optional, although usually you'll want to include `method`.
+
+- `method`: The method context (`this` inside of a `Meteor.methods` function).
+
+If you need to save method context to use at a later time, the only fields you need to save are:
+
+```
+{
+  connection: {
+    clientAddress,
+    synapsepay: {
+      fingerprint: 'foo'
+    }
+  }
+}   
+```
+
+- `userId`: The SynapsePay id of the user (not `Meteor.userId()`)
+- `opts`: Optional object that may have the following keys:
+  - `client_id` and `client_secret`: if you don't use one of the global configuration methods below
+  - `fingerprint`: if you want to override the random client id that this package generates and keeps in LocalStorage and on the `connection`
+  - `dontRefresh`: see [user](#user) section
+  - Any other fields that you would pass to `SynapsePayNpm`
+
+The first time you call `getClient`, it creates a new Synapse client. After that, if you're on the same Meteor client connection, it reuses the Synapse client.
+
 ### Keys
 
 There are three options for setting your SynapsePay `client_id` and `client_secret`:
@@ -44,42 +75,17 @@ There are three options for setting your SynapsePay `client_id` and `client_secr
   }
 }
 # then in code:
-client = new SynapsePay opts
+client = SynapsePay.getClient method, userId
 
 # 2. global init function
 SynapsePay.init('fakeid', 'fakesecret')
-client = new SynapsePay opts
+client = SynapsePay.getClient method, userId
 
-# 3. include with every client creation
-client = new SynapsePay
+# 3. include in opts
+client = SynapsePay.getClient method, userId, 
   client_id: 'fakeid'
   client_secret: 'fakesecret'
-  ip_address: '...'
   ...
-```
-
-### IP address
-
-Inside methods, the IP address can be obtained from `this.connection.clientAddress`.
-
-### Fingerprint
-
-One option is to save a random string in each browser and send the string along to any methods that need it.
-TODO
-
-```coffeescript
-# client.coffee
-unless localStorage.getItem 'browserId'
-  localStorage.setItem 'browserId', Random.id 20
-
-Meteor.call 'foo', localStorage.getItem 'browserId'
-
-# server.coffee
-Meteor.methods
-  foo: (browserId) ->
-    client = new SynapsePay
-      ip_address: @connection.clientAddress
-      fingerprint: browserId
 ```
 
 ### User
@@ -87,10 +93,9 @@ Meteor.methods
 When hitting a `nodes.*` or `transactions.*` endpoint, the `client` must be created with a user id, and it must have requested an oauth token. Retrieving an oauth token is done automatically for you. If you'd like to do this yourself, use the `dontRefresh: true` option:
 
 ```
-client = new SynapsePay
+client = SynapsePay.getClient method, userId, 
   ...
   dontRefresh: true
-, userId
 
 user = client.users.get user_id: userId
 client.users.refresh refresh_token: user.refresh_token
@@ -101,7 +106,7 @@ client.users.refresh refresh_token: user.refresh_token
 ### Create users
 
 ```coffeescript
-synapse = new SynapsePay opts
+synapse = SynapsePay.getClient method
 
 user = synapse.users.create userData
 synapse.users.refresh refresh_token: user.refresh_token
