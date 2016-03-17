@@ -29,21 +29,18 @@ Endpoints, arguments, and responses mirror the [V3 REST API](http://docs.synapse
 
 `SynapsePay.getClient method, userId, opts`
 
-All arguments are optional, although usually you'll want to include `method`.
-
 - `method`: The method context (`this` inside of a `Meteor.methods` function).
-- `userId`: The SynapsePay id of the user (not `Meteor.userId()`)
-- `opts`: Optional object that may have the following keys:
-  - `client_id` and `client_secret`: if you don't use one of the global configuration methods below
-  - `fingerprint`: if you want to override the random client id that this package generates and keeps in LocalStorage and on the `connection`
-  - `dontRefresh`: see [user](#user) section
-  - Any other fields that you would pass to `SynapsePayNpm`
 
-The first time you call `getClient`, it creates a new Synapse client. After that, if you're on the same Meteor client connection, it reuses the Synapse client.
-
-If you need to save method context to use at a later time, the only fields you need to save are:
-
+```coffeescript
+Meteor.methods
+  makePayment: ->
+    method = this
+    synapse = SynapsePay.getClient method
 ```
+
+The `method` contains the ip address and client fingerprint. If you need to save method context to use at a later time, the only fields you need to save are:
+
+```json
 {
   connection: {
     clientAddress,
@@ -53,6 +50,23 @@ If you need to save method context to use at a later time, the only fields you n
   }
 }   
 ```
+
+Alternatively, if you want to handle ip address and fingerprint manually, don't use `getClient`:
+
+```coffeescript
+synapse = new SynapsePay null, userId, 
+  ip_address: '...'
+  fingerprint: '...'
+```
+
+- `userId` (optional): The SynapsePay id of the user (not `Meteor.userId()`)
+- `opts` (optional): Optional object that may have the following keys:
+  - `client_id` and `client_secret`: if you don't use one of the global configuration methods below
+  - `fingerprint`: if you want to override the random client id that this package generates and keeps in LocalStorage and on the `connection`
+  - `dontRefresh`: see [user](#user) section
+  - Any other fields that you would pass to `SynapsePayNpm`
+
+The first time you call `getClient`, it creates a new Synapse client. After that, if you're on the same Meteor client connection, it reuses the Synapse client.
 
 ### Keys
 
