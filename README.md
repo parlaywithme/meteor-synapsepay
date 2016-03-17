@@ -40,7 +40,7 @@ Meteor.methods
 
 The `method` contains the ip address and client fingerprint. If you need to save method context to use at a later time, the only fields you need to save are:
 
-```json
+```
 {
   connection: {
     clientAddress,
@@ -51,7 +51,7 @@ The `method` contains the ip address and client fingerprint. If you need to save
 }   
 ```
 
-Alternatively, if you want to handle ip address and fingerprint manually, don't use `getClient`:
+Alternatively, if you want to handle ip address and fingerprint manually, create clients with `new SynapsePay` instead of `getClient`:
 
 ```coffeescript
 synapse = new SynapsePay null, userId, 
@@ -66,7 +66,7 @@ synapse = new SynapsePay null, userId,
   - `dontRefresh`: see [user](#user) section
   - Any other fields that you would pass to `SynapsePayNpm`
 
-The first time you call `getClient`, it creates a new Synapse client. After that, if you're on the same Meteor client connection, it reuses the Synapse client.
+The first time you call `getClient`, it creates a new Synapse client. After that, if you're on the same Meteor client connection, it reuses the same Synapse client.
 
 ### Keys
 
